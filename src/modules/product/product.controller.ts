@@ -25,7 +25,9 @@ const getProducts = async (req: Request, res: Response) => {
       result = await productServices.getSearchedProductsFromDb(
         searchTerm as string,
       );
-      if (!result) {
+
+      // handle no products found
+      if (result.length === 0) {
         return res.status(404).json({ message: 'No products found' });
       }
       res.status(200).json({
