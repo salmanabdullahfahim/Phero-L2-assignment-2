@@ -46,7 +46,7 @@ const productSchema = new Schema<TProduct>({
     required: true,
     message: 'Product tags is required',
   },
-  variants: variantsSchema,
+  variants: [variantsSchema],
   inventory: inventorySchema,
 });
 
