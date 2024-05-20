@@ -2,6 +2,7 @@ import express from 'express';
 import { productControllers } from './product.controller';
 
 const router = express.Router();
+// product routes
 router.post('/', productControllers.createProduct);
 router.get('/', productControllers.getProducts);
 router.get('/:productId', productControllers.getProductById);
