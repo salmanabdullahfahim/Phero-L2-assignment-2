@@ -23,30 +23,28 @@ const inventorySchema = new Schema<TInventory>({
 const productSchema = new Schema<TProduct>({
   name: {
     type: String,
-    required: true,
-    message: 'Product name is required',
+    required: [true, 'Product name is required'],
   },
   description: {
     type: String,
-    required: true,
-    message: 'Product description is required',
+    required: [true, 'Product name is required'],
   },
   price: {
     type: Number,
-    required: true,
-    message: 'Product price is required',
+    required: [true, 'Product name is required'],
   },
   category: {
     type: String,
-    required: true,
-    message: 'Product category is required',
+    required: [true, 'Product name is required'],
   },
   tags: {
     type: [String],
-    required: true,
-    message: 'Product tags is required',
+    required: [true, 'Product name is required'],
   },
-  variants: [variantsSchema],
+  variants: {
+    type: [variantsSchema],
+    required: [true, 'Product name is required'],
+  },
   inventory: inventorySchema,
 });
 
