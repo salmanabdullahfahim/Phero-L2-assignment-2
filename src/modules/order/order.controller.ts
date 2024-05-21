@@ -77,8 +77,12 @@ const getOrders = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'something went wrong',
+      error: error,
+    });
   }
 };
 
