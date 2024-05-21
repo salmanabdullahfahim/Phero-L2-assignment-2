@@ -27,36 +27,28 @@ const createProduct = async (req: Request, res: Response) => {
 // get all products
 const getProducts = async (req: Request, res: Response) => {
   try {
-    // for search products
+    // for get products by search term
     const { searchTerm } = req.query;
-    let result;
-    if (searchTerm) {
-      result = await productServices.getSearchedProductsFromDb(
-        searchTerm as string,
-      );
+    const result = await productServices.getProductsFromDb(
+      searchTerm as string | undefined,
+    );
 
-      // handle no products found
-      if (result.length === 0) {
-        return res.status(404).json({ message: 'No products found' });
-      }
-      res.status(200).json({
-        success: true,
-        message: `Products matching search term '${searchTerm}' fetched successfully!`,
-        data: result,
-      });
-    } else {
-      // for get all products
-      result = await productServices.getProductsFromDb();
-      res.status(200).json({
-        success: true,
-        message: 'Products fetched successfully!',
-        data: result,
-      });
+    // validation for get products if there is no products found
+    if (result.length === 0) {
+      return res.status(404).json({ message: 'No products found' });
     }
+
+    res.status(200).json({
+      success: true,
+      message: searchTerm
+        ? `Products matching search term '${searchTerm}' fetched successfully!`
+        : 'Products fetched successfully!',
+      data: result,
+    });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: error.message || 'something went wrong',
+      message: error.message || 'Something went wrong',
       error: error,
     });
   }
