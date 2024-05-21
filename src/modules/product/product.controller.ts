@@ -63,7 +63,7 @@ const getProductById = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'Products fetched successfully!',
+      message: 'Product fetched successfully!',
       data: result,
     });
   } catch (error: any) {
@@ -87,7 +87,9 @@ const updateProduct = async (req: Request, res: Response) => {
 
     // validation for updated product if there is no product found
     if (!result) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Product not found' });
     }
 
     // response after updating product

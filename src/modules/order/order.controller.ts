@@ -56,7 +56,9 @@ const getOrders = async (req: Request, res: Response) => {
 
     // validation for get orders if there is no orders found
     if (result.length === 0) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Order not found' });
     }
 
     res.status(200).json({
