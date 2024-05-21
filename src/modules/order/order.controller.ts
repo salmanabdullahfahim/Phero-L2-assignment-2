@@ -1,17 +1,22 @@
 import { Request, Response } from 'express';
 import { orderServices } from './order.service';
+import orderValidationSchema from './order.validation';
 
 // create order
 const createOrder = async (req: Request, res: Response) => {
   try {
     const orderData = req.body;
-    const result = await orderServices.createOrderIntoDb(orderData);
+
+    // zod parsed data
+    const parsedData = orderValidationSchema.parse(orderData);
+    const result = await orderServices.createOrderIntoDb(parsedData);
+
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof Error) {
       if (error.message === 'Product not found') {
         return res.status(404).json({
@@ -25,15 +30,16 @@ const createOrder = async (req: Request, res: Response) => {
           message: 'Insufficient quantity available in inventory',
         });
       }
-
       res.status(500).json({
         success: false,
-        message: 'An unexpected error occurred',
+        message: error.message || 'something went wrong',
+        error: error,
       });
     } else {
       res.status(500).json({
         success: false,
-        message: 'An unexpected error occurred',
+        message: error.message || 'something went wrong',
+        error: error,
       });
     }
   }
