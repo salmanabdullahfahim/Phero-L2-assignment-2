@@ -12,7 +12,30 @@ const createOrder = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      if (error.message === 'Product not found') {
+        return res.status(404).json({
+          success: false,
+          message: 'Product not found',
+        });
+      }
+      if (error.message === 'Insufficient quantity available in inventory') {
+        return res.status(400).json({
+          success: false,
+          message: 'Insufficient quantity available in inventory',
+        });
+      }
+
+      res.status(500).json({
+        success: false,
+        message: 'An unexpected error occurred',
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'An unexpected error occurred',
+      });
+    }
   }
 };
 
@@ -28,7 +51,7 @@ const getOrders = async (req: Request, res: Response) => {
 
       // validation for get orders if there is no orders found
       if (result.length === 0) {
-        return res.status(404).json({ message: 'No orders found' });
+        return res.status(404).json({ message: 'Order not found' });
       }
       res.status(200).json({
         success: true,
@@ -38,6 +61,10 @@ const getOrders = async (req: Request, res: Response) => {
     } else {
       // for get all orders
       result = await orderServices.getOrdersFromDb();
+      // validation for get orders if there is no orders found
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
       res.status(200).json({
         success: true,
         message: 'Orders fetched successfully!',
