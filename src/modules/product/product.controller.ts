@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { productServices } from './product.service';
 import productValidationSchema from './product.validation';
 
+// create product
 const createProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body;
@@ -27,7 +28,7 @@ const createProduct = async (req: Request, res: Response) => {
 // get all products
 const getProducts = async (req: Request, res: Response) => {
   try {
-    // for get products by search term
+    // get searchTerm from query
     const { searchTerm } = req.query;
     const result = await productServices.getProductsFromDb(
       searchTerm as string | undefined,

@@ -48,11 +48,13 @@ const createOrder = async (req: Request, res: Response) => {
 // get all orders
 const getOrders = async (req: Request, res: Response) => {
   try {
+    // get email from query
     const { email } = req.query;
     const result = await orderServices.getOrdersFromDb(
       email as string | undefined,
     );
 
+    // validation for get orders if there is no orders found
     if (result.length === 0) {
       return res.status(404).json({ message: 'Order not found' });
     }

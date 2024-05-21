@@ -33,12 +33,13 @@ const createOrderIntoDb = async (payload: TOrder) => {
   return result;
 };
 
-// get all orders from db
+// get all / by email orders from db
 const getOrdersFromDb = async (email?: string) => {
   // get orders by email from db
   if (email) {
     return await Order.find({ email });
   } else {
+    // get all orders
     return await Order.find();
   }
 };

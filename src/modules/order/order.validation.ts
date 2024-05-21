@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// define Zod schema for Order
 const orderValidationSchema = z.object({
   email: z.string().email('Invalid email'),
   productId: z.string().nonempty('Product ID is required'),
