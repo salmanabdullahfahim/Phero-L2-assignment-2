@@ -49,38 +49,25 @@ const createOrder = async (req: Request, res: Response) => {
 const getOrders = async (req: Request, res: Response) => {
   try {
     const { email } = req.query;
-    let result;
+    const result = await orderServices.getOrdersFromDb(
+      email as string | undefined,
+    );
 
-    // for get orders by specific email
-    if (email) {
-      result = await orderServices.getOrdersByEmailFromDb(email as string);
-
-      // validation for get orders if there is no orders found
-      if (result.length === 0) {
-        return res.status(404).json({ message: 'Order not found' });
-      }
-      res.status(200).json({
-        success: true,
-        message: 'Orders fetched successfully for user email!',
-        data: result,
-      });
-    } else {
-      // for get all orders
-      result = await orderServices.getOrdersFromDb();
-      // validation for get orders if there is no orders found
-      if (result.length === 0) {
-        return res.status(404).json({ message: 'Order not found' });
-      }
-      res.status(200).json({
-        success: true,
-        message: 'Orders fetched successfully!',
-        data: result,
-      });
+    if (result.length === 0) {
+      return res.status(404).json({ message: 'Order not found' });
     }
+
+    res.status(200).json({
+      success: true,
+      message: email
+        ? 'Orders fetched successfully for user email!'
+        : 'Orders fetched successfully!',
+      data: result,
+    });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: error.message || 'something went wrong',
+      message: error.message || 'Something went wrong',
       error: error,
     });
   }
