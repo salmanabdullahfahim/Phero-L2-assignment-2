@@ -27,7 +27,7 @@ const getProductByIdFromDb = async (productId: string) => {
 };
 
 // update product
-const updateProductIntoDb = async (productId: string, payload: TProduct) => {
+const updateProductIntoDb = async (productId: string, payload) => {
   const result = await Product.findByIdAndUpdate(productId, payload, {
     new: true,
     runValidators: true,

@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { productServices } from './product.service';
-import productValidationSchema from './product.validation';
+import productValidationSchema, {
+  partialProductValidationSchema,
+} from './product.validation';
 import { TProduct } from './product.interface';
 
 // create product
@@ -81,7 +83,8 @@ const updateProduct = async (req: Request, res: Response) => {
   try {
     const id = req.params.productId;
     const updatedProductData = req.body;
-    const updatedParseData = productValidationSchema.parse(updatedProductData);
+    const updatedParseData =
+      partialProductValidationSchema.parse(updatedProductData);
     const result = await productServices.updateProductIntoDb(
       id,
       updatedParseData,
