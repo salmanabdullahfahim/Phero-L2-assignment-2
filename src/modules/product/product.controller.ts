@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { productServices } from './product.service';
 import productValidationSchema from './product.validation';
+import { TProduct } from './product.interface';
 
 // create product
 const createProduct = async (req: Request, res: Response) => {
@@ -8,7 +9,7 @@ const createProduct = async (req: Request, res: Response) => {
     const productData = req.body;
 
     //zod parsed data
-    const parsedData = productValidationSchema.parse(productData);
+    const parsedData: TProduct = productValidationSchema.parse(productData);
 
     const result = await productServices.createProductIntoDb(parsedData);
     res.status(200).json({
@@ -80,9 +81,10 @@ const updateProduct = async (req: Request, res: Response) => {
   try {
     const id = req.params.productId;
     const updatedProductData = req.body;
+    const updatedParseData = productValidationSchema.parse(updatedProductData);
     const result = await productServices.updateProductIntoDb(
       id,
-      updatedProductData,
+      updatedParseData,
     );
 
     // validation for updated product if there is no product found
